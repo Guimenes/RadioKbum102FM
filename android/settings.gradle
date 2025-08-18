@@ -44,7 +44,7 @@ if (getRNMinorVersion() >= 75) {
   }
 }
 
-rootProject.name = 'Rádio Kbum 102 FM'
+rootProject.name = 'Rádio Kbum 102.7 FM'
 
 dependencyResolutionManagement {
   versionCatalogs {
