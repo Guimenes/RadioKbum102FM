@@ -3,13 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  Dimensions,
   Image,
   Animated,
   StatusBar,
 } from "react-native";
-
-const { width } = Dimensions.get("window");
 
 interface SplashScreenProps {
   onFinish?: () => void;
@@ -68,10 +65,10 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" backgroundColor="#FF6B35" />
-      
+
       {/* Background gradiente */}
       <View style={styles.gradientBackground} />
-      
+
       <Animated.View
         style={[
           styles.content,
@@ -100,7 +97,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         {/* Título da rádio */}
         <Text style={styles.title}>KBUM 102.7 FM</Text>
         <Text style={styles.subtitle}>A SUA RÁDIO FAVORITA</Text>
-        
+
         {/* Indicador de carregamento */}
         <View style={styles.loadingContainer}>
           <View style={styles.loadingBar}>

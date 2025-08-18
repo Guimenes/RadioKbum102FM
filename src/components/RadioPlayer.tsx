@@ -133,7 +133,8 @@ export const RadioPlayer: React.FC = () => {
               value={isMuted ? 0 : volume}
               onValueChange={changeVolume}
               minimumTrackTintColor="#FF6B35"
-              maximumTrackTintColor="#FF6B35"
+              maximumTrackTintColor="#E0E0E0"
+              thumbTintColor="#FF6B35"
             />
           </View>
 

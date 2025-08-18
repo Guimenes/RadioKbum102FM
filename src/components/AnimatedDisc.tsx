@@ -96,6 +96,32 @@ const AnimatedDisc = memo(
             ]}
           />
 
+          {/* Reflexo de luz no disco */}
+          <View
+            style={[
+              styles.discReflection,
+              {
+                width: size * 0.6,
+                height: size * 0.6,
+                borderRadius: (size * 0.6) / 2,
+                top: size * 0.1,
+                left: size * 0.15,
+              },
+            ]}
+          />
+
+          {/* Borda externa metálica */}
+          <View
+            style={[
+              styles.discBorder,
+              {
+                width: size,
+                height: size,
+                borderRadius: size / 2,
+              },
+            ]}
+          />
+
           {/* Centro do disco com botão play/pause */}
           <View
             style={[
@@ -119,6 +145,17 @@ const AnimatedDisc = memo(
                 },
               ]}
             >
+              {/* Anel interno decorativo */}
+              <View
+                style={[
+                  styles.innerRing,
+                  {
+                    width: size * 0.25,
+                    height: size * 0.25,
+                    borderRadius: (size * 0.25) / 2,
+                  },
+                ]}
+              />
               <View style={styles.playButtonContainer}>
                 {isLoading ? (
                   <View style={styles.loadingContainer}>
@@ -146,7 +183,10 @@ const AnimatedDisc = memo(
                     name={isPlaying ? "pause" : "play"}
                     size={size * 0.12}
                     color="#fff"
-                    style={!isPlaying && { marginLeft: size * 0.01 }}
+                    style={[
+                      !isPlaying && { marginLeft: size * 0.01 },
+                      styles.playIcon,
+                    ]}
                   />
                 )}
               </View>
@@ -160,20 +200,43 @@ const AnimatedDisc = memo(
               { width: size, height: size, borderRadius: size / 2 },
             ]}
           >
-            {[...Array(3)].map((_, index) => (
+            {[...Array(6)].map((_, index) => (
               <View
                 key={index}
                 style={[
                   styles.vinylLine,
                   {
-                    width: size - index * size * 0.15,
-                    height: size - index * size * 0.15,
-                    borderRadius: (size - index * size * 0.15) / 2,
-                    borderWidth: 1,
+                    width: size - index * size * 0.08,
+                    height: size - index * size * 0.08,
+                    borderRadius: (size - index * size * 0.08) / 2,
+                    borderWidth: index % 2 === 0 ? 1 : 0.5,
+                    opacity: 0.6 - index * 0.05,
                   },
                 ]}
               />
             ))}
+          </View>
+
+          {/* Pontos decorativos no disco */}
+          <View style={styles.decorativeDots}>
+            {[...Array(8)].map((_, index) => {
+              const angle = (index * 360) / 8;
+              const radius = size * 0.35;
+              const x = Math.cos((angle * Math.PI) / 180) * radius;
+              const y = Math.sin((angle * Math.PI) / 180) * radius;
+              return (
+                <View
+                  key={index}
+                  style={[
+                    styles.decorativeDot,
+                    {
+                      left: size / 2 + x - 2,
+                      top: size / 2 + y - 2,
+                    },
+                  ]}
+                />
+              );
+            })}
           </View>
         </Animated.View>
 
@@ -207,6 +270,17 @@ const styles = StyleSheet.create({
     position: "absolute",
     backgroundColor: "rgba(255, 107, 53, 0.1)",
   },
+  discReflection: {
+    position: "absolute",
+    backgroundColor: "rgba(255, 255, 255, 0.15)",
+    borderRadius: 50,
+  },
+  discBorder: {
+    position: "absolute",
+    borderWidth: 2,
+    borderColor: "#FF6B35",
+    backgroundColor: "transparent",
+  },
   centerHole: {
     position: "absolute",
     backgroundColor: "#1a1a1a",
@@ -218,18 +292,27 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF6B35",
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 2,
+    borderWidth: 3,
     borderColor: "#FFD700",
+    position: "relative",
   },
-  kbumContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+  innerRing: {
+    position: "absolute",
+    borderWidth: 1,
+    borderColor: "rgba(255, 215, 0, 0.5)",
+    backgroundColor: "transparent",
   },
   playButtonContainer: {
     justifyContent: "center",
     alignItems: "center",
     width: "100%",
     height: "100%",
+    zIndex: 10,
+  },
+  playIcon: {
+    textShadowColor: "rgba(0, 0, 0, 0.5)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   loadingContainer: {
     flexDirection: "row",
@@ -256,8 +339,20 @@ const styles = StyleSheet.create({
   },
   vinylLine: {
     position: "absolute",
-    borderColor: "rgba(255, 255, 255, 0.1)",
+    borderColor: "rgba(255, 255, 255, 0.2)",
     backgroundColor: "transparent",
+  },
+  decorativeDots: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+  decorativeDot: {
+    position: "absolute",
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: "rgba(255, 215, 0, 0.7)",
   },
   centerLogo: {
     width: "80%",

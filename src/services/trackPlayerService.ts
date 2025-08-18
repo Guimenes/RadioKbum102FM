@@ -45,7 +45,6 @@ const TrackPlayerService = async function () {
   // Evento para mudanças de estado - atualizar metadados do media center
   TrackPlayer.addEventListener(Event.PlaybackState, async (state) => {
     console.log("Playback state changed:", state);
-    
     try {
       // Atualizar metadados no centro de mídia baseado no estado
       if (state.state === "playing") {

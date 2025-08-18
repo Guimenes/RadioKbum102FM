@@ -13,21 +13,9 @@ const setupMediaCenter = async () => {
         appKilledPlaybackBehavior: "ContinuePlayback" as any,
         alwaysPauseOnInterruption: false,
       },
-      capabilities: [
-        "play" as any,
-        "pause" as any,
-        "stop" as any,
-      ],
-      compactCapabilities: [
-        "play" as any,
-        "pause" as any,
-        "stop" as any,
-      ],
-      notificationCapabilities: [
-        "play" as any,
-        "pause" as any,
-        "stop" as any,
-      ],
+      capabilities: ["play" as any, "pause" as any, "stop" as any],
+      compactCapabilities: ["play" as any, "pause" as any, "stop" as any],
+      notificationCapabilities: ["play" as any, "pause" as any, "stop" as any],
       icon: require("../../assets/images/logo102kbum.png"),
       playIcon: require("../../assets/images/logo102kbum.png"),
       pauseIcon: require("../../assets/images/logo102kbum.png"),
@@ -81,7 +69,7 @@ const setupMediaCenterEvents = () => {
   // Atualizar metadados em tempo real (simulado)
   TrackPlayer.addEventListener(Event.PlaybackState, (data: any) => {
     if (data.state === "playing") {
-      TrackPlayer.updateMetadataForTrack("radio-kbum-102fm", {
+      TrackPlayer.updateMetadataForTrack(0, {
         title: "Rádio Kbum 102.7 FM",
         artist: "🔴 AO VIVO",
         artwork: require("../../assets/images/logo102kbum.png"),
