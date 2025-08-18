@@ -5,6 +5,7 @@ import TrackPlayer, {
   Event,
   State,
 } from "react-native-track-player";
+import { initializeTrackPlayer } from "./trackPlayerSetup";
 
 export const RADIO_STREAM_URL =
   "https://srv946411.hstgr.cloud/listen/kbum_102/live";
@@ -21,6 +22,9 @@ class RadioPlayerService {
     }
 
     try {
+      // Registrar o serviço de background apenas uma vez
+      await initializeTrackPlayer();
+
       await TrackPlayer.setupPlayer({
         waitForBuffer: true,
       });
