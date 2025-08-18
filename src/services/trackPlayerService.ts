@@ -42,9 +42,44 @@ const TrackPlayerService = async function () {
     console.log("Playback queue ended");
   });
 
-  // Evento para mudanças de estado
-  TrackPlayer.addEventListener(Event.PlaybackState, (state) => {
+  // Evento para mudanças de estado - atualizar metadados do media center
+  TrackPlayer.addEventListener(Event.PlaybackState, async (state) => {
     console.log("Playback state changed:", state);
+    
+    try {
+      // Atualizar metadados no centro de mídia baseado no estado
+      if (state.state === "playing") {
+        await TrackPlayer.updateNowPlayingMetadata({
+          title: "Rádio Kbum 102.7 FM",
+          artist: "🔴 AO VIVO",
+          album: "Transmissão ao Vivo",
+          description: "A sua rádio favorita tocando os melhores sucessos!",
+          genre: "Música Popular",
+          artwork: require("../../assets/images/logo102kbum.png"),
+        });
+      } else if (state.state === "paused") {
+        await TrackPlayer.updateNowPlayingMetadata({
+          title: "Rádio Kbum 102.7 FM",
+          artist: "⏸️ PAUSADO",
+          album: "Transmissão ao Vivo",
+          description: "Toque para continuar ouvindo",
+          genre: "Música Popular",
+          artwork: require("../../assets/images/logo102kbum.png"),
+        });
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar metadados:", error);
+    }
+  });
+
+  // Evento para erros
+  TrackPlayer.addEventListener(Event.PlaybackError, (error) => {
+    console.error("Playback error:", error);
+  });
+
+  // Evento para when the track changes (útil para streaming)
+  TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (data) => {
+    console.log("Active track changed:", data);
   });
 };
 

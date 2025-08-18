@@ -113,7 +113,7 @@ export const RadioPlayer: React.FC = () => {
             <AnimatedDisc
               isPlaying={isPlaying}
               isLoading={isLoading}
-              size={200}
+              size={180}
             />
           </TouchableOpacity>
 

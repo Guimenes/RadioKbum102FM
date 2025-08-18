@@ -14,30 +14,35 @@ const AnimatedDisc = memo(
     const animationRef = useRef<Animated.CompositeAnimation | null>(null);
 
     useEffect(() => {
-      // Para qualquer animação existente
-      if (animationRef.current) {
-        animationRef.current.stop();
-        animationRef.current = null;
-      }
-
       if (isPlaying) {
+        // Para qualquer animação existente
+        if (animationRef.current) {
+          animationRef.current.stop();
+          animationRef.current = null;
+        }
+
         // Cria uma animação infinita e contínua
         const createInfiniteRotation = () => {
+          rotateAnimation.setValue(0); // Reset para início limpo
           return Animated.loop(
             Animated.timing(rotateAnimation, {
               toValue: 1,
-              duration: 3000, // 3 segundos por rotação (um pouco mais rápido)
-              easing: Easing.linear,
+              duration: 8000, // 8 segundos por rotação
+              easing: Easing.linear, // Linear para rotação uniforme
               useNativeDriver: true,
             }),
-            { iterations: -1 }
+            { iterations: -1, resetBeforeIteration: true }
           );
         };
 
-        // Reseta o valor para 0 e inicia nova animação
-        rotateAnimation.setValue(0);
         animationRef.current = createInfiniteRotation();
         animationRef.current.start();
+      } else {
+        // Para a animação quando não estiver tocando
+        if (animationRef.current) {
+          animationRef.current.stop();
+          animationRef.current = null;
+        }
       }
 
       return () => {
@@ -51,11 +56,11 @@ const AnimatedDisc = memo(
     const rotation = rotateAnimation.interpolate({
       inputRange: [0, 1],
       outputRange: ["0deg", "360deg"],
-      extrapolate: "clamp", // Melhora a performance
+      extrapolate: "extend", // Permite rotação contínua sem limites
     });
 
     return (
-      <View style={[styles.container, { width: size, height: size }]}>
+      <View style={[styles.container, { width: size + 40, height: size + 40 }]}>
         <Animated.View
           style={[
             styles.discContainer,
@@ -172,20 +177,7 @@ const AnimatedDisc = memo(
           </View>
         </Animated.View>
 
-        {/* Brilho do disco */}
-        {isPlaying && (
-          <Animated.View
-            style={[
-              styles.discGlow,
-              {
-                width: size + 10,
-                height: size + 10,
-                borderRadius: (size + 10) / 2,
-                transform: [{ rotate: rotation }],
-              },
-            ]}
-          />
-        )}
+        {/* Brilho do disco - removido para evitar tremulação */}
       </View>
     );
   }
@@ -199,20 +191,14 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 20,
+    marginVertical: 10,
+    paddingHorizontal: 20, // Espaço lateral para evitar cortes
   },
   discContainer: {
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-    elevation: 15,
     position: "relative",
+    // Removidas todas as sombras para evitar tremulação
   },
   discImage: {
     position: "absolute",
@@ -226,14 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#1a1a1a",
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
-    elevation: 8,
+    // Removidas sombras para evitar tremulação
   },
   centerLabel: {
     backgroundColor: "#FF6B35",
@@ -284,19 +263,5 @@ const styles = StyleSheet.create({
     width: "80%",
     height: "80%",
     tintColor: "#fff",
-  },
-  discGlow: {
-    position: "absolute",
-    backgroundColor: "transparent",
-    borderWidth: 2,
-    borderColor: "rgba(255, 107, 53, 0.5)",
-    shadowColor: "#FF6B35",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.8,
-    shadowRadius: 15,
-    elevation: 20,
   },
 });

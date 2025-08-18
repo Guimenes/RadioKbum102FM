@@ -1,0 +1,14 @@
+{
+  "name": "generate-assets",
+  "description": "Script para gerar assets para produção",
+  "scripts": {
+    "assets:generate": "echo 'Para gerar os assets, use as seguintes dimensões:'",
+    "assets:icon": "echo 'Ícone principal: 1024x1024px - ./assets/icon.png'",
+    "assets:adaptive": "echo 'Ícone adaptativo: 1024x1024px - ./assets/adaptive-icon.png'", 
+    "assets:splash": "echo 'Splash screen: 1284x2778px - ./assets/splash.png'",
+    "assets:favicon": "echo 'Favicon: 48x48px - ./assets/favicon.png'",
+    "build:preview": "eas build --platform android --profile preview",
+    "build:production": "eas build --platform android --profile production",
+    "build:ios": "eas build --platform ios --profile production"
+  }
+}
