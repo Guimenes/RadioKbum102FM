@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
   Linking,
+  Animated,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
@@ -15,6 +16,46 @@ import { useRadioPlayer } from "../hooks/useRadioPlayer";
 import AnimatedDisc from "./AnimatedDisc";
 
 const { width } = Dimensions.get("window");
+
+// Componente da bolinha piscante
+const BlinkingDot: React.FC = () => {
+  const opacityAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const blinkAnimation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacityAnim, {
+          toValue: 0.3,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacityAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ]),
+      { iterations: -1 }
+    );
+
+    blinkAnimation.start();
+
+    return () => {
+      blinkAnimation.stop();
+    };
+  }, [opacityAnim]);
+
+  return (
+    <Animated.View
+      style={[
+        styles.blinkingDot,
+        {
+          opacity: opacityAnim,
+        },
+      ]}
+    />
+  );
+};
 
 export const RadioPlayer: React.FC = () => {
   const {
@@ -63,7 +104,12 @@ export const RadioPlayer: React.FC = () => {
           <Text style={styles.stationName}>KBUM 102.7 FM</Text>
 
           {/* Disco Animado */}
-          <TouchableOpacity onPress={togglePlayback} disabled={isLoading}>
+          <TouchableOpacity
+            onPress={togglePlayback}
+            disabled={isLoading}
+            activeOpacity={1}
+            style={styles.discTouchable}
+          >
             <AnimatedDisc
               isPlaying={isPlaying}
               isLoading={isLoading}
@@ -91,7 +137,16 @@ export const RadioPlayer: React.FC = () => {
             />
           </View>
 
-          <Text style={styles.tapToListen}>Toque para ouvir</Text>
+          <View style={styles.statusContainer}>
+            {isPlaying ? (
+              <View style={styles.liveStatusContainer}>
+                <BlinkingDot />
+                <Text style={styles.liveText}>Ao vivo</Text>
+              </View>
+            ) : (
+              <Text style={styles.tapToListen}>Toque para ouvir</Text>
+            )}
+          </View>
 
           {error && <Text style={styles.errorText}>{error}</Text>}
         </View>
@@ -171,6 +226,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 20,
   },
+  discTouchable: {
+    borderRadius: 100,
+    overflow: "hidden",
+  },
   volumeContainer: {
     flexDirection: "row",
     alignItems: "center",
@@ -203,6 +262,30 @@ const styles = StyleSheet.create({
     color: "#666",
     textAlign: "center",
     marginTop: 10,
+  },
+  statusContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 10,
+    minHeight: 30,
+  },
+  liveStatusContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  liveText: {
+    fontSize: 16,
+    color: "#22c55e",
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  blinkingDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#22c55e",
   },
   errorText: {
     fontSize: 14,

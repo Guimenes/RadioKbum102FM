@@ -43,7 +43,7 @@ const TrackPlayerService = async function () {
   });
 
   // Evento para mudanças de estado
-  TrackPlayer.addEventListener(Event.PlaybackState, state => {
+  TrackPlayer.addEventListener(Event.PlaybackState, (state) => {
     console.log("Playback state changed:", state);
   });
 };
