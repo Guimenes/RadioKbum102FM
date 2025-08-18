@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   Text,
@@ -7,11 +7,11 @@ import {
   ActivityIndicator,
   Dimensions,
   ImageBackground,
-} from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { useRadioPlayer } from '../hooks/useRadioPlayer';
+} from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+import { useRadioPlayer } from "../hooks/useRadioPlayer";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export const RadioPlayer: React.FC = () => {
   const { isPlaying, isLoading, error, togglePlayback } = useRadioPlayer();
@@ -19,13 +19,13 @@ export const RadioPlayer: React.FC = () => {
   return (
     <ImageBackground
       source={{
-        uri: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80',
+        uri: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2340&q=80",
       }}
       style={styles.background}
       resizeMode="cover"
     >
       <LinearGradient
-        colors={['rgba(0,0,0,0.7)', 'rgba(0,0,0,0.9)']}
+        colors={["rgba(0,0,0,0.7)", "rgba(0,0,0,0.9)"]}
         style={styles.overlay}
       >
         <View style={styles.container}>
@@ -41,7 +41,7 @@ export const RadioPlayer: React.FC = () => {
           <View style={styles.infoContainer}>
             <Text style={styles.stationName}>Rádio Kbum 102 FM</Text>
             <Text style={styles.nowPlaying}>
-              {isPlaying ? 'Ao Vivo' : 'Parado'}
+              {isPlaying ? "Ao Vivo" : "Parado"}
             </Text>
             {error && <Text style={styles.errorText}>{error}</Text>}
           </View>
@@ -57,7 +57,7 @@ export const RadioPlayer: React.FC = () => {
                 <ActivityIndicator size="large" color="#fff" />
               ) : (
                 <Text style={styles.playButtonText}>
-                  {isPlaying ? '⏸️' : '▶️'}
+                  {isPlaying ? "⏸️" : "▶️"}
                 </Text>
               )}
             </TouchableOpacity>
@@ -69,20 +69,18 @@ export const RadioPlayer: React.FC = () => {
               <View
                 style={[
                   styles.statusDot,
-                  { backgroundColor: isPlaying ? '#00ff00' : '#ff0000' },
+                  isPlaying ? styles.statusDotOnline : styles.statusDotOffline,
                 ]}
               />
               <Text style={styles.statusText}>
-                {isPlaying ? 'AO VIVO' : 'OFFLINE'}
+                {isPlaying ? "AO VIVO" : "OFFLINE"}
               </Text>
             </View>
           </View>
 
           {/* Informações adicionais */}
           <View style={styles.footerContainer}>
-            <Text style={styles.footerText}>
-              A melhor música está aqui!
-            </Text>
+            <Text style={styles.footerText}>A melhor música está aqui!</Text>
             <Text style={styles.frequencyText}>102.0 FM</Text>
           </View>
         </View>
@@ -102,89 +100,89 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'space-around',
-    alignItems: 'center',
+    justifyContent: "space-around",
+    alignItems: "center",
     paddingHorizontal: 20,
     paddingVertical: 40,
   },
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 20,
   },
   logoPlaceholder: {
     width: 150,
     height: 150,
     borderRadius: 75,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
     borderWidth: 3,
-    borderColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
   },
   logoText: {
     fontSize: 32,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
   },
   logoSubtext: {
     fontSize: 18,
-    color: '#fff',
-    textAlign: 'center',
+    color: "#fff",
+    textAlign: "center",
     marginTop: 5,
   },
   infoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   stationName: {
     fontSize: 28,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
     marginBottom: 10,
   },
   nowPlaying: {
     fontSize: 18,
-    color: '#ccc',
-    textAlign: 'center',
+    color: "#ccc",
+    textAlign: "center",
   },
   errorText: {
     fontSize: 14,
-    color: '#ff6b6b',
-    textAlign: 'center',
+    color: "#ff6b6b",
+    textAlign: "center",
     marginTop: 10,
   },
   controlsContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 30,
   },
   playButton: {
     width: 100,
     height: 100,
     borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
     borderWidth: 2,
-    borderColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
   playButtonText: {
     fontSize: 40,
-    color: '#fff',
+    color: "#fff",
   },
   statusContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginVertical: 20,
   },
   statusIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   statusDot: {
     width: 12,
@@ -192,25 +190,31 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginRight: 8,
   },
+  statusDotOnline: {
+    backgroundColor: "#00ff00",
+  },
+  statusDotOffline: {
+    backgroundColor: "#ff0000",
+  },
   statusText: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#fff',
+    fontWeight: "bold",
+    color: "#fff",
   },
   footerContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 20,
   },
   footerText: {
     fontSize: 16,
-    color: '#ccc',
-    textAlign: 'center',
+    color: "#ccc",
+    textAlign: "center",
     marginBottom: 5,
   },
   frequencyText: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#fff',
-    textAlign: 'center',
+    fontWeight: "bold",
+    color: "#fff",
+    textAlign: "center",
   },
 });

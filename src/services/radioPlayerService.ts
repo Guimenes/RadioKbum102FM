@@ -4,15 +4,18 @@ import TrackPlayer, {
   RepeatMode,
   Event,
   State,
-} from 'react-native-track-player';
+} from "react-native-track-player";
 
-export const RADIO_STREAM_URL = 'https://srv946411.hstgr.cloud/listen/kbum_102/live';
+export const RADIO_STREAM_URL =
+  "https://srv946411.hstgr.cloud/listen/kbum_102/live";
 
 class RadioPlayerService {
   private isSetup = false;
 
   async setupPlayer() {
-    if (this.isSetup) return;
+    if (this.isSetup) {
+      return;
+    }
 
     try {
       await TrackPlayer.setupPlayer({
@@ -38,11 +41,11 @@ class RadioPlayerService {
       });
 
       const track = {
-        id: 'radio-kbum-102fm',
+        id: "radio-kbum-102fm",
         url: RADIO_STREAM_URL,
-        title: 'Kbum 102 FM',
-        artist: 'Rádio Kbum 102 FM',
-        artwork: 'https://i.imgur.com/placeholder.png', // Substitua pela URL do logo da rádio
+        title: "Kbum 102 FM",
+        artist: "Rádio Kbum 102 FM",
+        artwork: "https://i.imgur.com/placeholder.png", // Substitua pela URL do logo da rádio
         isLiveStream: true,
       };
 
@@ -51,7 +54,7 @@ class RadioPlayerService {
 
       this.isSetup = true;
     } catch (error) {
-      console.error('Erro ao configurar o player:', error);
+      console.error("Erro ao configurar o player:", error);
     }
   }
 
@@ -60,7 +63,7 @@ class RadioPlayerService {
       await this.setupPlayer();
       await TrackPlayer.play();
     } catch (error) {
-      console.error('Erro ao reproduzir:', error);
+      console.error("Erro ao reproduzir:", error);
     }
   }
 
@@ -68,7 +71,7 @@ class RadioPlayerService {
     try {
       await TrackPlayer.pause();
     } catch (error) {
-      console.error('Erro ao pausar:', error);
+      console.error("Erro ao pausar:", error);
     }
   }
 
@@ -76,7 +79,7 @@ class RadioPlayerService {
     try {
       await TrackPlayer.stop();
     } catch (error) {
-      console.error('Erro ao parar:', error);
+      console.error("Erro ao parar:", error);
     }
   }
 
@@ -84,7 +87,7 @@ class RadioPlayerService {
     try {
       return await TrackPlayer.getPlaybackState();
     } catch (error) {
-      console.error('Erro ao obter estado:', error);
+      console.error("Erro ao obter estado:", error);
       return { state: State.None };
     }
   }
@@ -94,7 +97,7 @@ class RadioPlayerService {
       await TrackPlayer.reset();
       this.isSetup = false;
     } catch (error) {
-      console.error('Erro ao resetar:', error);
+      console.error("Erro ao resetar:", error);
     }
   }
 

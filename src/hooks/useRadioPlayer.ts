@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { State } from 'react-native-track-player';
-import { radioPlayerService } from '../services/radioPlayerService';
+import { useState, useEffect } from "react";
+import { State, Event } from "react-native-track-player";
+import { radioPlayerService } from "../services/radioPlayerService";
 
 export const useRadioPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -12,11 +12,14 @@ export const useRadioPlayer = () => {
     radioPlayerService.setupPlayer();
 
     // Listener para mudanças de estado
-    const subscription = radioPlayerService.addEventListener('playback-state', (data) => {
-      const { state } = data;
-      setIsPlaying(state === State.Playing);
-      setIsLoading(state === State.Buffering || state === State.Connecting);
-    });
+    const subscription = radioPlayerService.addEventListener(
+      Event.PlaybackState,
+      (data: any) => {
+        const { state } = data;
+        setIsPlaying(state === State.Playing);
+        setIsLoading(state === State.Buffering || state === State.Connecting);
+      }
+    );
 
     return () => {
       subscription?.remove();
@@ -29,7 +32,7 @@ export const useRadioPlayer = () => {
       setIsLoading(true);
       await radioPlayerService.play();
     } catch (err) {
-      setError('Erro ao reproduzir a rádio');
+      setError("Erro ao reproduzir a rádio");
       console.error(err);
     } finally {
       setIsLoading(false);
@@ -41,7 +44,7 @@ export const useRadioPlayer = () => {
       setError(null);
       await radioPlayerService.pause();
     } catch (err) {
-      setError('Erro ao pausar a rádio');
+      setError("Erro ao pausar a rádio");
       console.error(err);
     }
   };
@@ -51,7 +54,7 @@ export const useRadioPlayer = () => {
       setError(null);
       await radioPlayerService.stop();
     } catch (err) {
-      setError('Erro ao parar a rádio');
+      setError("Erro ao parar a rádio");
       console.error(err);
     }
   };
