@@ -6,17 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": false,
     "description": "Rádio Kbum 102.7 FM - A sua rádio favorita agora no seu celular! Ouça ao vivo a melhor programação musical.",
-    "keywords": [
-      "radio",
-      "music",
-      "kbum",
-      "102.7",
-      "fm",
-      "live",
-      "streaming"
-    ],
     "privacy": "public",
     "platforms": [
       "ios",
