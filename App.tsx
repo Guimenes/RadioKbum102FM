@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StyleSheet, View } from "react-native";
 import TrackPlayer from "react-native-track-player";
 import { RadioPlayer } from "./src/components/RadioPlayer";
 
@@ -14,8 +15,16 @@ export default function App() {
 
   return (
     <SafeAreaProvider>
-      <StatusBar style="light" />
-      <RadioPlayer />
+      <StatusBar style="light" backgroundColor="transparent" translucent />
+      <View style={styles.container}>
+        <RadioPlayer />
+      </View>
     </SafeAreaProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});

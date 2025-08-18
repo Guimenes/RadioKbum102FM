@@ -11,6 +11,9 @@ export const RADIO_STREAM_URL =
 
 class RadioPlayerService {
   private isSetup = false;
+  private volume = 1.0;
+  private isMuted = false;
+  private previousVolume = 1.0;
 
   async setupPlayer() {
     if (this.isSetup) {
@@ -103,6 +106,44 @@ class RadioPlayerService {
 
   addEventListener(event: Event, listener: any) {
     return TrackPlayer.addEventListener(event, listener);
+  }
+
+  async setVolume(volume: number) {
+    try {
+      this.volume = Math.max(0, Math.min(1, volume));
+      await TrackPlayer.setVolume(this.volume);
+      if (this.volume > 0) {
+        this.isMuted = false;
+      }
+    } catch (error) {
+      console.error("Erro ao definir volume:", error);
+    }
+  }
+
+  async getVolume() {
+    return this.volume;
+  }
+
+  async toggleMute() {
+    try {
+      if (this.isMuted) {
+        // Desmuta - volta ao volume anterior
+        this.volume = this.previousVolume;
+        this.isMuted = false;
+      } else {
+        // Muta - salva o volume atual e define como 0
+        this.previousVolume = this.volume;
+        this.volume = 0;
+        this.isMuted = true;
+      }
+      await TrackPlayer.setVolume(this.volume);
+    } catch (error) {
+      console.error("Erro ao alternar mute:", error);
+    }
+  }
+
+  isMutedState() {
+    return this.isMuted;
   }
 }
 

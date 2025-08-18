@@ -10,16 +10,36 @@ import {
   Linking,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import Slider from "@react-native-community/slider";
 import { useRadioPlayer } from "../hooks/useRadioPlayer";
 import AnimatedDisc from "./AnimatedDisc";
 
-const { width, height } = Dimensions.get("window");
+const { width } = Dimensions.get("window");
 
 export const RadioPlayer: React.FC = () => {
-  const { isPlaying, isLoading, error, togglePlayback } = useRadioPlayer();
+  const {
+    isPlaying,
+    isLoading,
+    error,
+    volume,
+    isMuted,
+    togglePlayback,
+    changeVolume,
+    toggleMute,
+  } = useRadioPlayer();
 
   const openSocialMedia = (url: string) => {
     Linking.openURL(url);
+  };
+
+  const getVolumeIcon = () => {
+    if (isMuted || volume === 0) {
+      return "volume-mute";
+    } else if (volume < 0.5) {
+      return "volume-low";
+    } else {
+      return "volume-high";
+    }
   };
 
   return (
@@ -53,11 +73,22 @@ export const RadioPlayer: React.FC = () => {
 
           {/* Controle de Volume */}
           <View style={styles.volumeContainer}>
-            <Ionicons name="volume-low" size={24} color="#666" />
-            <View style={styles.volumeTrack}>
-              <View style={styles.volumeProgress} />
-            </View>
-            <Ionicons name="volume-high" size={24} color="#666" />
+            <TouchableOpacity onPress={toggleMute}>
+              <Ionicons
+                name={getVolumeIcon()}
+                size={24}
+                color={isMuted ? "#FF6B35" : "#FF6B35"}
+              />
+            </TouchableOpacity>
+            <Slider
+              style={styles.volumeSlider}
+              minimumValue={0}
+              maximumValue={1}
+              value={isMuted ? 0 : volume}
+              onValueChange={changeVolume}
+              minimumTrackTintColor="#FF6B35"
+              maximumTrackTintColor="#FF6B35"
+            />
           </View>
 
           <Text style={styles.tapToListen}>Toque para ouvir</Text>
@@ -94,29 +125,32 @@ export const RadioPlayer: React.FC = () => {
 const styles = StyleSheet.create({
   background: {
     flex: 1,
-    width: width,
-    height: height,
+    marginTop: -50,
+    marginBottom: -50,
   },
   container: {
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 40,
+    paddingTop: 95,
+    paddingBottom: 20,
+    position: "relative",
+    zIndex: 1,
   },
   logoContainer: {
     alignItems: "center",
     marginBottom: 20,
   },
   logo: {
-    width: 200,
-    height: 80,
+    width: 300,
+    height: 300,
   },
   playerCard: {
     backgroundColor: "rgba(255, 255, 255, 0.95)",
     borderRadius: 30,
-    padding: 30,
+    padding: 10,
+    marginBottom: 20,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -127,7 +161,7 @@ const styles = StyleSheet.create({
     shadowRadius: 20,
     elevation: 15,
     marginHorizontal: 20,
-    width: width - 40,
+    width: width - 0,
     maxWidth: 350,
   },
   stationName: {
@@ -144,6 +178,11 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     paddingHorizontal: 20,
     width: "100%",
+  },
+  volumeSlider: {
+    flex: 1,
+    height: 40,
+    marginHorizontal: 15,
   },
   volumeTrack: {
     flex: 1,
@@ -176,7 +215,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 20,
-    marginBottom: 20,
+    marginBottom: 80,
+    paddingBottom: 0,
   },
   socialButton: {
     width: 50,
