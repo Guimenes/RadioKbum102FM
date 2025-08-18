@@ -8,21 +8,36 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": false,
     "description": "Rádio Kbum 102.7 FM - A sua rádio favorita agora no seu celular! Ouça ao vivo a melhor programação musical.",
-    "keywords": ["radio", "music", "kbum", "102.7", "fm", "live", "streaming"],
+    "keywords": [
+      "radio",
+      "music",
+      "kbum",
+      "102.7",
+      "fm",
+      "live",
+      "streaming"
+    ],
     "privacy": "public",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#FF6B35"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.radiokbum102fm.app",
       "buildNumber": "1",
       "infoPlist": {
-        "UIBackgroundModes": ["audio"],
+        "UIBackgroundModes": [
+          "audio"
+        ],
         "NSAppTransportSecurity": {
           "NSAllowsArbitraryLoads": true
         },
@@ -55,7 +70,10 @@
               "host": "radiokbum102fm.com"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
@@ -83,9 +101,13 @@
       "typedRoutes": true
     },
     "extra": {
+      "router": {
+        "origin": false
+      },
       "eas": {
-        "projectId": "your-project-id-here"
+        "projectId": "1fbb4388-574a-4338-b9d5-c601febc6fcf"
       }
-    }
+    },
+    "owner": "guimene"
   }
 }
