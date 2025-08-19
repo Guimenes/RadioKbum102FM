@@ -1,6 +1,6 @@
 {
   "cli": {
-    "version": ">= 7.8.0",
+    "version": ">= 16.17.0",
     "appVersionSource": "remote"
   },
   "build": {

@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, memo } from "react";
 import { StyleSheet, View, Image, Animated, Easing } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import {
+  useResponsiveDimensions,
+  getResponsiveSize,
+} from "../hooks/useResponsiveDimensions";
 
 interface AnimatedDiscProps {
   isPlaying: boolean;
@@ -12,6 +16,12 @@ const AnimatedDisc = memo(
   ({ isPlaying, isLoading = false, size = 150 }: AnimatedDiscProps) => {
     const rotateAnimation = useRef(new Animated.Value(0)).current;
     const animationRef = useRef<Animated.CompositeAnimation | null>(null);
+    const dimensions = useResponsiveDimensions();
+
+    // Calcular tamanhos responsivos baseados no tamanho do disco
+    const iconSize = getResponsiveSize(size * 0.12, dimensions, 12, 30);
+    const loadingDotSize = getResponsiveSize(size * 0.02, dimensions, 2, 6);
+    const containerPadding = getResponsiveSize(20, dimensions, 10, 30);
 
     useEffect(() => {
       if (isPlaying) {
@@ -60,7 +70,16 @@ const AnimatedDisc = memo(
     });
 
     return (
-      <View style={[styles.container, { width: size + 40, height: size + 40 }]}>
+      <View
+        style={[
+          styles.container,
+          {
+            width: size + 40,
+            height: size + 40,
+            paddingHorizontal: containerPadding,
+          },
+        ]}
+      >
         <Animated.View
           style={[
             styles.discContainer,
@@ -162,26 +181,26 @@ const AnimatedDisc = memo(
                     <View
                       style={[
                         styles.loadingDot,
-                        { width: size * 0.02, height: size * 0.02 },
+                        { width: loadingDotSize, height: loadingDotSize },
                       ]}
                     />
                     <View
                       style={[
                         styles.loadingDot,
-                        { width: size * 0.02, height: size * 0.02 },
+                        { width: loadingDotSize, height: loadingDotSize },
                       ]}
                     />
                     <View
                       style={[
                         styles.loadingDot,
-                        { width: size * 0.02, height: size * 0.02 },
+                        { width: loadingDotSize, height: loadingDotSize },
                       ]}
                     />
                   </View>
                 ) : (
                   <Ionicons
                     name={isPlaying ? "pause" : "play"}
-                    size={size * 0.12}
+                    size={iconSize}
                     color="#fff"
                     style={[
                       !isPlaying && { marginLeft: size * 0.01 },
@@ -255,7 +274,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginVertical: 10,
-    paddingHorizontal: 20, // Espaço lateral para evitar cortes
+    // Padding responsivo aplicado dinamicamente
   },
   discContainer: {
     justifyContent: "center",
@@ -324,6 +343,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 2,
     opacity: 0.8,
+    // Tamanho responsivo aplicado dinamicamente
   },
   kbumText: {
     color: "#fff",

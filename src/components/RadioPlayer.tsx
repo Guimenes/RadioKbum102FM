@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
   ImageBackground,
   Image,
   Linking,
@@ -13,9 +12,16 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import Slider from "@react-native-community/slider";
 import { useRadioPlayer } from "../hooks/useRadioPlayer";
+import {
+  useResponsiveDimensions,
+  getResponsiveSize,
+  getResponsivePadding,
+} from "../hooks/useResponsiveDimensions";
+import {
+  getDeviceConfig,
+  getResponsiveFontSize,
+} from "../utils/responsiveUtils";
 import AnimatedDisc from "./AnimatedDisc";
-
-const { width } = Dimensions.get("window");
 
 // Componente da bolinha piscante
 const BlinkingDot: React.FC = () => {
@@ -69,6 +75,12 @@ export const RadioPlayer: React.FC = () => {
     toggleMute,
   } = useRadioPlayer();
 
+  const dimensions = useResponsiveDimensions();
+  const padding = getResponsivePadding(dimensions);
+
+  // Usar configuração de dispositivo mais avançada
+  const deviceConfig = getDeviceConfig(dimensions.width, dimensions.height);
+
   const openSocialMedia = (url: string) => {
     Linking.openURL(url);
   };
@@ -83,25 +95,78 @@ export const RadioPlayer: React.FC = () => {
     }
   };
 
+  // Tamanhos responsivos baseados na configuração do dispositivo
+  const logoSize = 280; // Mantém tamanho fixo mais adequado
+  const discSize = deviceConfig.discSize;
+  const playerCardWidth = deviceConfig.cardMaxWidth;
+  const socialButtonSize = getResponsiveSize(50, dimensions, 40, 70);
+
+  // Tamanhos de fonte responsivos
+  const fontSize = {
+    stationName: getResponsiveFontSize(
+      deviceConfig.fontSize.title,
+      dimensions.width,
+      dimensions.fontScale
+    ),
+    liveText: getResponsiveFontSize(
+      deviceConfig.fontSize.subtitle,
+      dimensions.width,
+      dimensions.fontScale
+    ),
+    tapToListen: getResponsiveFontSize(
+      deviceConfig.fontSize.subtitle,
+      dimensions.width,
+      dimensions.fontScale
+    ),
+    error: getResponsiveFontSize(
+      deviceConfig.fontSize.body,
+      dimensions.width,
+      dimensions.fontScale
+    ),
+  };
+
   return (
     <ImageBackground
       source={require("../../assets/images/fundo.jpg")}
       style={styles.background}
       resizeMode="cover"
     >
-      <View style={styles.container}>
+      <View
+        style={[
+          styles.container,
+          { paddingHorizontal: padding.horizontal },
+          dimensions.isLandscape && styles.landscapeContainer,
+        ]}
+      >
         {/* Logo da Rádio */}
         <View style={styles.logoContainer}>
           <Image
             source={require("../../assets/images/logo102kbum.png")}
-            style={styles.logo}
+            style={[
+              styles.logo,
+              { width: logoSize, height: logoSize },
+              dimensions.isLandscape && {
+                width: logoSize * 0.8,
+                height: logoSize * 0.8,
+              },
+            ]}
             resizeMode="contain"
           />
         </View>
 
         {/* Player Card */}
-        <View style={styles.playerCard}>
-          <Text style={styles.stationName}>KBUM 102.7 FM</Text>
+        <View
+          style={[
+            styles.playerCard,
+            { width: playerCardWidth },
+            dimensions.isLandscape && styles.landscapePlayerCard,
+          ]}
+        >
+          <Text
+            style={[styles.stationName, { fontSize: fontSize.stationName }]}
+          >
+            KBUM 102.7 FM
+          </Text>
 
           {/* Disco Animado */}
           <TouchableOpacity
@@ -113,7 +178,7 @@ export const RadioPlayer: React.FC = () => {
             <AnimatedDisc
               isPlaying={isPlaying}
               isLoading={isLoading}
-              size={180}
+              size={discSize}
             />
           </TouchableOpacity>
 
@@ -122,7 +187,7 @@ export const RadioPlayer: React.FC = () => {
             <TouchableOpacity onPress={toggleMute}>
               <Ionicons
                 name={getVolumeIcon()}
-                size={24}
+                size={getResponsiveSize(24, dimensions, 20, 28)}
                 color={isMuted ? "#FF6B35" : "#FF6B35"}
               />
             </TouchableOpacity>
@@ -142,36 +207,117 @@ export const RadioPlayer: React.FC = () => {
             {isPlaying ? (
               <View style={styles.liveStatusContainer}>
                 <BlinkingDot />
-                <Text style={styles.liveText}>Ao vivo</Text>
+                <Text
+                  style={[styles.liveText, { fontSize: fontSize.liveText }]}
+                >
+                  Ao vivo
+                </Text>
               </View>
             ) : (
-              <Text style={styles.tapToListen}>Toque para ouvir</Text>
+              <Text
+                style={[styles.tapToListen, { fontSize: fontSize.tapToListen }]}
+              >
+                Toque para ouvir
+              </Text>
             )}
           </View>
 
-          {error && <Text style={styles.errorText}>{error}</Text>}
+          {error && (
+            <Text style={[styles.errorText, { fontSize: fontSize.error }]}>
+              {error}
+            </Text>
+          )}
+
+          {/* Redes Sociais dentro do Player */}
+          <View style={styles.socialContainer}>
+            <TouchableOpacity
+              style={[
+                styles.socialButton,
+                styles.facebookButton,
+                {
+                  width: socialButtonSize * 0.8,
+                  height: socialButtonSize * 0.8,
+                  borderRadius: (socialButtonSize * 0.8) / 2,
+                },
+              ]}
+              onPress={() =>
+                openSocialMedia("https://www.facebook.com/radiokbum102")
+              }
+            >
+              <Ionicons
+                name="logo-facebook"
+                size={getResponsiveSize(20, dimensions, 16, 24)}
+                color="#fff"
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.socialButton,
+                styles.instagramButton,
+                {
+                  width: socialButtonSize * 0.8,
+                  height: socialButtonSize * 0.8,
+                  borderRadius: (socialButtonSize * 0.8) / 2,
+                },
+              ]}
+              onPress={() =>
+                openSocialMedia("https://www.instagram.com/radiokbum102")
+              }
+            >
+              <Ionicons
+                name="logo-instagram"
+                size={getResponsiveSize(20, dimensions, 16, 24)}
+                color="#fff"
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.socialButton,
+                styles.youtubeButton,
+                {
+                  width: socialButtonSize * 0.8,
+                  height: socialButtonSize * 0.8,
+                  borderRadius: (socialButtonSize * 0.8) / 2,
+                },
+              ]}
+              onPress={() =>
+                openSocialMedia("https://www.youtube.com/@radiokbum102")
+              }
+            >
+              <Ionicons
+                name="logo-youtube"
+                size={getResponsiveSize(20, dimensions, 16, 24)}
+                color="#fff"
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.socialButton,
+                styles.whatsappButton,
+                {
+                  width: socialButtonSize * 0.8,
+                  height: socialButtonSize * 0.8,
+                  borderRadius: (socialButtonSize * 0.8) / 2,
+                },
+              ]}
+              onPress={() => openSocialMedia("https://wa.me/5511999999999")}
+            >
+              <Ionicons
+                name="logo-whatsapp"
+                size={getResponsiveSize(20, dimensions, 16, 24)}
+                color="#fff"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
 
-        {/* Redes Sociais */}
-        <View style={styles.socialContainer}>
-          <TouchableOpacity
-            style={styles.socialButton}
-            onPress={() => openSocialMedia("https://facebook.com")}
-          >
-            <Ionicons name="logo-facebook" size={24} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.socialButton}
-            onPress={() => openSocialMedia("https://instagram.com")}
-          >
-            <Ionicons name="logo-instagram" size={24} color="#fff" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.socialButton}
-            onPress={() => openSocialMedia("https://youtube.com")}
-          >
-            <Ionicons name="logo-youtube" size={24} color="#fff" />
-          </TouchableOpacity>
+        {/* Footer */}
+        <View style={styles.footerContainer}>
+          <Text style={styles.footerText}>Rádio KBUM 102.7 FM • 2025</Text>
+          <Text style={styles.footerSubText}>Todos os direitos reservados</Text>
         </View>
       </View>
     </ImageBackground>
@@ -186,21 +332,23 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "space-between",
+    justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 95,
-    paddingBottom: 20,
+    paddingTop: 40,
+    paddingBottom: 80,
     position: "relative",
     zIndex: 1,
+  },
+  landscapeContainer: {
+    paddingTop: 30,
+    paddingBottom: 60,
   },
   logoContainer: {
     alignItems: "center",
     marginBottom: 20,
   },
   logo: {
-    width: 300,
-    height: 300,
+    // Tamanho dinâmico aplicado via props
   },
   playerCard: {
     backgroundColor: "rgba(255, 255, 255, 0.95)",
@@ -216,16 +364,19 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 20,
     elevation: 15,
-    marginHorizontal: 20,
-    width: width - 0,
-    maxWidth: 350,
+    alignSelf: "center",
+    // Largura dinâmica aplicada via props
+  },
+  landscapePlayerCard: {
+    marginBottom: 10,
+    padding: 8,
   },
   stationName: {
-    fontSize: 22,
     fontWeight: "bold",
     color: "#333",
     textAlign: "center",
     marginBottom: 20,
+    // Tamanho da fonte dinâmico aplicado via props
   },
   discTouchable: {
     borderRadius: 100,
@@ -259,10 +410,10 @@ const styles = StyleSheet.create({
     borderRadius: 2,
   },
   tapToListen: {
-    fontSize: 16,
     color: "#666",
     textAlign: "center",
     marginTop: 10,
+    // Tamanho da fonte dinâmico aplicado via props
   },
   statusContainer: {
     alignItems: "center",
@@ -277,10 +428,10 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   liveText: {
-    fontSize: 16,
     color: "#22c55e",
     fontWeight: "600",
     textAlign: "center",
+    // Tamanho da fonte dinâmico aplicado via props
   },
   blinkingDot: {
     width: 8,
@@ -289,33 +440,69 @@ const styles = StyleSheet.create({
     backgroundColor: "#22c55e",
   },
   errorText: {
-    fontSize: 14,
     color: "#ff6b6b",
     textAlign: "center",
     marginTop: 10,
+    // Tamanho da fonte dinâmico aplicado via props
   },
   socialContainer: {
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 20,
-    marginBottom: 80,
-    paddingBottom: 0,
+    gap: 15,
+    marginTop: 15,
+    paddingHorizontal: 10,
+    flexWrap: "wrap",
+  },
+  landscapeSocialContainer: {
+    gap: 12,
+    marginTop: 10,
   },
   socialButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "rgba(0, 0, 0, 0.6)",
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: 3,
     },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 6,
+  },
+  facebookButton: {
+    backgroundColor: "#1877f2",
+  },
+  instagramButton: {
+    backgroundColor: "#E4405F",
+  },
+  youtubeButton: {
+    backgroundColor: "#FF0000",
+  },
+  whatsappButton: {
+    backgroundColor: "#25D366",
+  },
+  // Estilos do footer
+  footerContainer: {
+    alignItems: "center",
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    marginBottom: 40,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+  },
+  footerText: {
+    color: "#333",
+    fontSize: 14,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  footerSubText: {
+    color: "#666",
+    fontSize: 12,
+    textAlign: "center",
+    marginTop: 2,
   },
 });

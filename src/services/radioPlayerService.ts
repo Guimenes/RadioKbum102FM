@@ -117,7 +117,7 @@ class RadioPlayerService {
         );
 
         // Aguardar antes de tentar novamente
-        await new Promise((resolve) =>
+        await new Promise(resolve =>
           setTimeout(resolve, 2000 * this.retryCount)
         );
         // Reset do player antes de tentar novamente

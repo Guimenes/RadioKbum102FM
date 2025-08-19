@@ -43,7 +43,7 @@ const TrackPlayerService = async function () {
   });
 
   // Evento para mudanças de estado - atualizar metadados do media center
-  TrackPlayer.addEventListener(Event.PlaybackState, async (state) => {
+  TrackPlayer.addEventListener(Event.PlaybackState, async state => {
     console.log("Playback state changed:", state);
     try {
       // Atualizar metadados no centro de mídia baseado no estado
@@ -72,12 +72,12 @@ const TrackPlayerService = async function () {
   });
 
   // Evento para erros
-  TrackPlayer.addEventListener(Event.PlaybackError, (error) => {
+  TrackPlayer.addEventListener(Event.PlaybackError, error => {
     console.error("Playback error:", error);
   });
 
   // Evento para when the track changes (útil para streaming)
-  TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, (data) => {
+  TrackPlayer.addEventListener(Event.PlaybackActiveTrackChanged, data => {
     console.log("Active track changed:", data);
   });
 };
